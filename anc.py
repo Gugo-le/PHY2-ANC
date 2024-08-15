@@ -15,7 +15,7 @@ def load_audio(file_path):
     return samples, audio.frame_rate
 
 # 노이즈 제거 함수 (주파수 필터링을 통해)
-def noise_cancellation(input_signal, frame_rate, cutoff_frequency=1000):
+def noise_cancellation(input_signal, frame_rate, cutoff_frequency=10):
     # Fourier Transform을 사용하여 시간 영역 신호를 주파수 영역으로 변환
     signal_freq = rfft(input_signal)
     
@@ -82,7 +82,7 @@ def save_audio(output_signal, frame_rate, output_file_path):
     output_audio.export(output_file_path, format="wav")
 
 # 메인 함수 (프로그램 실행의 진입점)
-def main(input_file, output_file, cutoff_frequency=1000):
+def main(input_file, output_file, cutoff_frequency=10):
     # 오디오 파일 로드
     input_signal, frame_rate = load_audio(input_file)
     
@@ -96,9 +96,9 @@ def main(input_file, output_file, cutoff_frequency=1000):
     save_audio(output_signal, frame_rate, output_file)
 
 # 사용 예시 (input_file에서 output_file로 변환)
-input_file = "input.wav"  # 입력 오디오 파일 경로
-output_file = "output1.wav"  # 출력 오디오 파일 경로
-cutoff_frequency = 1000  # 필터링할 주파수(Hz)
+input_file = "./audio/input.wav"  # 입력 오디오 파일 경로
+output_file = "output.wav"  # 출력 오디오 파일 경로
+cutoff_frequency = 10  # 필터링할 주파수(Hz)
 
 # 메인 함수 실행
 main(input_file, output_file, cutoff_frequency)
