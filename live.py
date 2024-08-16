@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import sounddevice as sd
-from scipy.fft import rfft, rfftfreq
+from scipy.fft import rfft, rfftfreq, irfft
 
 # 샘플링 레이트 및 차단 주파수 설정
 fs = 44100  # 샘플링 레이트 (Hz)
@@ -14,7 +14,7 @@ def noise_cancellation(input_signal, frame_rate, cutoff_frequency):
     signal_freq = rfft(input_signal)
     frequencies = rfftfreq(len(input_signal), d=1/frame_rate)
     signal_freq[frequencies > cutoff_frequency] = 0
-    output_signal = np.fft.irfft(signal_freq)
+    output_signal = irfft(signal_freq)
     return output_signal
 
 # 실시간 그래프 업데이트 함수
@@ -33,6 +33,7 @@ def update_plot(frame):
     # 그래프 업데이트
     original_line.set_ydata(original_magnitude)
     filtered_line.set_ydata(filtered_magnitude)
+    
     return original_line, filtered_line
 
 # 오디오 콜백 함수
@@ -47,14 +48,25 @@ def callback(indata_, outdata, frames, time, status):
 frequencies = rfftfreq(blocksize, d=1/fs)
 indata = np.zeros((blocksize, 1))  # 빈 입력 데이터로 초기화
 
-fig, ax = plt.subplots()
-original_line, = ax.plot(frequencies, np.zeros_like(frequencies), label="Original Signal Spectrum")
-filtered_line, = ax.plot(frequencies, np.zeros_like(frequencies), label="Noise Cancelled Spectrum", linestyle='--')
-ax.set_xlim(0, fs/2)
-ax.set_ylim(0, 200)
-ax.set_xlabel("Frequency (Hz)")
-ax.set_ylabel("Magnitude")
-ax.legend()
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+# 첫 번째 그래프: 원본 신호의 주파수 스펙트럼
+original_line, = ax1.plot(frequencies, np.zeros_like(frequencies), label="Original Signal Spectrum")
+ax1.set_xlim(0, fs/2)
+ax1.set_ylim(0, 200)
+ax1.set_xlabel("Frequency (Hz)")
+ax1.set_ylabel("Magnitude")
+ax1.set_title("Original Signal Spectrum")
+ax1.legend()
+
+# 두 번째 그래프: 노이즈 캔슬링된 신호의 주파수 스펙트럼
+filtered_line, = ax2.plot(frequencies, np.zeros_like(frequencies), label="Noise Cancelled Spectrum", linestyle='--')
+ax2.set_xlim(0, fs/2)
+ax2.set_ylim(0, 200)
+ax2.set_xlabel("Frequency (Hz)")
+ax2.set_ylabel("Magnitude")
+ax2.set_title("Noise Cancelled Signal Spectrum")
+ax2.legend()
 
 # 스트림 설정 및 시작
 stream = sd.Stream(callback=callback, channels=1, samplerate=fs, blocksize=blocksize)
@@ -64,6 +76,7 @@ stream.start()
 ani = FuncAnimation(fig, update_plot, blit=True, interval=50)
 
 # 실시간 그래프 표시
+plt.tight_layout()
 plt.show()
 
 # 스트림 중지 및 종료
