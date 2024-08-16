@@ -82,7 +82,7 @@ def save_audio(output_signal, frame_rate, output_file_path):
     output_audio.export(output_file_path, format="wav")
 
 # 메인 함수 (프로그램 실행의 진입점)
-def main(input_file, output_file, cutoff_frequency=1000):
+def main(input_file, output_file, cutoff_frequency=0):
     # 오디오 파일 로드
     input_signal, frame_rate = load_audio(input_file)
     
@@ -98,7 +98,7 @@ def main(input_file, output_file, cutoff_frequency=1000):
 # 사용 예시 (input_file에서 output_file로 변환)
 input_file = "./audio/input.wav"  # 입력 오디오 파일 경로
 output_file = "output.wav"  # 출력 오디오 파일 경로
-cutoff_frequency = 1000  # 필터링할 주파수(Hz)
+cutoff_frequency = 0  # 필터링할 주파수(Hz)
 
 # 메인 함수 실행
 main(input_file, output_file, cutoff_frequency)
