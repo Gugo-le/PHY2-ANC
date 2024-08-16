@@ -12,12 +12,11 @@ cutoff_frequency = 500  # 노이즈 캔슬링 필터의 차단 주파수 (Hz)
 # 오디오 콜백 함수
 def callback(indata_, outdata, frames, time, status):
     global indata, filtered_signal
-    indata = indata_.copy()  # 현재 입력 데이터를 전역 변수에 저장
+    indata = indata_.copy()  # 현재 입력 데이터를 전역  변수에 저장
 
     # Fourier Transform을 사용하여 주파수 영역으로 변환
     signal_freq = rfft(indata[:, 0])
     frequencies = rfftfreq(len(indata), d=1/fs)
-
     # 특정 주파수 이상의 성분을 제거 (노이즈 제거)
     signal_freq[frequencies > cutoff_frequency] = 0
 
