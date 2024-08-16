@@ -52,7 +52,7 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
 
 # 첫 번째 그래프: 원본 신호의 주파수 스펙트럼
 original_line, = ax1.plot(frequencies, np.zeros_like(frequencies), label="Original Signal Spectrum")
-ax1.set_xlim(0, fs/2)
+ax1.set_xlim(0, 10000)  # 주파수 범위를 0Hz에서 10000Hz로 설정
 ax1.set_ylim(0, 200)
 ax1.set_xlabel("Frequency (Hz)")
 ax1.set_ylabel("Magnitude")
@@ -60,8 +60,8 @@ ax1.set_title("Original Signal Spectrum")
 ax1.legend()
 
 # 두 번째 그래프: 노이즈 캔슬링된 신호의 주파수 스펙트럼
-filtered_line, = ax2.plot(frequencies, np.zeros_like(frequencies), label="Noise Cancelled Spectrum", linestyle='--')
-ax2.set_xlim(0, fs/2)
+filtered_line, = ax2.plot(frequencies, np.zeros_like(frequencies), label="Noise Cancelled Spectrum", linestyle='--', color='orange')
+ax2.set_xlim(0, 10000)  # 주파수 범위를 0Hz에서 10000Hz로 설정
 ax2.set_ylim(0, 200)
 ax2.set_xlabel("Frequency (Hz)")
 ax2.set_ylabel("Magnitude")
