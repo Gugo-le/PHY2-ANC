@@ -5,9 +5,9 @@ from scipy.fft import rfft, irfft, rfftfreq
 from matplotlib.animation import FuncAnimation
 
 # 샘플링 레이트 및 차단 주파수 설정
-fs = 44100  # 샘플링 레이트 (Hz)
-blocksize = 1024  # 한 번에 처리할 샘플의 개수
-cutoff_frequency = 1000  # 노이즈 캔슬링 필터의 차단 주파수 (Hz)
+fs = 20000  # 샘플링 레이트 (Hz)
+blocksize = 512  # 한 번에 처리할 샘플의 개수
+cutoff_frequency = 500  # 노이즈 캔슬링 필터의 차단 주파수 (Hz)
 
 # 오디오 콜백 함수
 def callback(indata_, outdata, frames, time, status):
